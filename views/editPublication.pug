@@ -1,0 +1,23 @@
+html
+    head
+    body 
+        h1 Editar Publicación
+        form(role='form' method='POST' action='http://localhost:3000/publications/editPublication')
+            input(type="hidden", name="idPublication", id="idPublication", value=id) 
+            | Nombre 
+            input(type="text", name="name", id="name", value=name)
+            br 
+            | Descripción
+            input(type="text", name="description", id="description", value=description) 
+            br
+            | Usuario 
+            input(type="text", name="iduser", id="iduser", value=iduser) 
+            br
+            | Categoría
+            input(type="text", name="idcategory", id="idcategory", value=idcategory) 
+            br
+            | Imagen del Banner 
+            input(type="text", name="bannerimage", id="bannerimage", value=bannerimage)
+            br 
+            input(type="submit")
+    script(src='/static/js/editarAnalista.js')

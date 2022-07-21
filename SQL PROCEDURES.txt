@@ -1,0 +1,34 @@
+CREATE OR REPLACE PROCEDURE lista_publicaciones(cursorParam OUT SYS_REFCURSOR)
+IS
+BEGIN 
+    OPEN cursorParam FOR
+        SELECT * FROM PUBLICATIONS; 
+END;
+
+CREATE OR REPLACE PROCEDURE eliminar_publicacion(idPublicacion IN NUMBER)
+IS
+BEGIN 
+    DELETE FROM PUBLICATIONS where ID = idPublicacion;
+END;
+
+CREATE OR REPLACE PROCEDURE crear_publicacion(name IN VARCHAR2, description IN VARCHAR2, idUser IN NUMBER, idCategory IN NUMBER, bannerImage IN VARCHAR2)
+IS
+BEGIN 
+   INSERT INTO PUBLICATIONS (NAME, DESCRIPTION, IDUSER, IDCATEGORY, BANNERIMAGE, PUBLISHEDAT) 
+        VALUES(name, description, idUser, idCategory, bannerImage, CURRENT_DATE);
+END;
+
+CREATE OR REPLACE PROCEDURE actualizar_publicacion(idPublication IN NUMBER, nameP IN VARCHAR2, descriptionP IN VARCHAR2, idUserP IN NUMBER, idCategoryP IN NUMBER, bannerImageP IN VARCHAR2)
+IS
+BEGIN 
+   UPDATE PUBLICATIONS SET NAME = nameP, DESCRIPTION = descriptionP, IDUSER = idUserP, 
+        IDCATEGORY = idCategoryP, BANNERIMAGE = bannerImageP WHERE ID = idPublication;  
+END;
+
+CREATE OR REPLACE PROCEDURE lista_publicaciones_by_id(cursorParam OUT SYS_REFCURSOR, idPublication IN NUMBER)
+IS
+BEGIN 
+    OPEN cursorParam FOR
+        SELECT * FROM PUBLICATIONS WHERE ID = idPublication; 
+END;
+
