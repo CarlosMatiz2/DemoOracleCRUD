@@ -1,14 +1,13 @@
 const oracledb = require('oracledb');
-// hr schema password
-var password = 'PoloMarco22';
+require('dotenv').config();
 // checkConnection asycn function
 
 async function checkConnection() {
     try {
         connection = await oracledb.getConnection({
-            user: "SYSTEM",
-            password: password,
-            connectString: "localhost:1521/xe"
+            user: process.env.USER,
+            password: process.env.PASSWORD,
+            connectString: process.env.CONNECTSTRING
         });
         console.log("Successfully connected to Oracle!")
     } catch (err) {

@@ -2,6 +2,7 @@ const express = require('express')
 const oracledb = require('oracledb');
 // https://github.com/oracle/node-oracledb/tree/main/examples
 var publication = express.Router();
+require('dotenv').config();
 var password = 'PoloMarco22';
 
 publication.get('/getAllPublications', function (req, res) {
@@ -72,9 +73,9 @@ publication.get('/example', function (req, res) {
 async function p_selectAllPublications(req, res) {
     try {
         connection = await oracledb.getConnection({
-            user: "SYSTEM",
-            password: password,
-            connectString: "localhost:1521/xe"
+            user: process.env.USER,
+            password: process.env.PASSWORD,
+            connectString: process.env.CONNECTSTRING
         });
 
         await connection.execute(`    
@@ -122,9 +123,9 @@ async function p_selectAllPublications(req, res) {
 async function p_deletePublicationById(req, res, id) {
     try {
         connection = await oracledb.getConnection({
-            user: "SYSTEM",
-            password: password,
-            connectString: "localhost:1521/xe"
+            user: process.env.USER,
+            password: process.env.PASSWORD,
+            connectString: process.env.CONNECTSTRING
         });
 
         await connection.execute(`    
@@ -163,9 +164,9 @@ async function p_deletePublicationById(req, res, id) {
 async function p_createPublication(req, res, user) {
     try {
         connection = await oracledb.getConnection({
-            user: "SYSTEM",
-            password: password,
-            connectString: "localhost:1521/xe"
+            user: process.env.USER,
+            password: process.env.PASSWORD,
+            connectString: process.env.CONNECTSTRING
         });
 
         await connection.execute(`    
@@ -202,7 +203,8 @@ async function p_createPublication(req, res, user) {
             }
         }
        
-        return res.send(result);   
+        //return res.send(result);  
+        return res.render('publications'); 
         // return res.render('analistas');
     }
 }
@@ -210,9 +212,9 @@ async function p_createPublication(req, res, user) {
 async function p_editPublication(req, res, user) {
     try {
         connection = await oracledb.getConnection({
-            user: "SYSTEM",
-            password: password,
-            connectString: "localhost:1521/xe"
+            user: process.env.USER,
+            password: process.env.PASSWORD,
+            connectString: process.env.CONNECTSTRING
         });
 
         await connection.execute(`    
@@ -256,9 +258,9 @@ async function p_editPublication(req, res, user) {
 async function p_selectPublicationByIdEdit(req, res, id) {
     try {
         connection = await oracledb.getConnection({
-            user: "SYSTEM",
-            password: password,
-            connectString: "localhost:1521/xe"
+            user: process.env.USER,
+            password: process.env.PASSWORD,
+            connectString: process.env.CONNECTSTRING
         });
 
         await connection.execute(`    
