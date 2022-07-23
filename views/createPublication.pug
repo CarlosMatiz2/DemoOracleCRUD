@@ -40,10 +40,16 @@ html
                                     input(type="text" class="form-control" name="description" id="description" placeholder="Descripción")
                                 div(class="form-group")
                                     label(for="iduser") Usuario
-                                    input(type="text" class="form-control" name="iduser" id="iduser" placeholder="Usuario")
+                                    select(class="form-select" name="iduser" id="iduser")
+                                      option(selected) Seleccione a un usuario
+                                      each val in listUser
+                                        option(value=val[0])= val[2]
                                 div(class="form-group")
                                     label(for="idcategory") Categoría
-                                    input(type="text" class="form-control" name="idcategory" id="idcategory" placeholder="Categoría")
+                                    select(class="form-select" name="idcategory" id="idcategory")
+                                      option(selected) Seleccione una categoría
+                                      each val in listCategories
+                                        option(value=val[0])= val[1]
                                 div(class="form-group")
                                     label(for="idcategory") Imagen del Banner
                                     input(type="text" class="form-control" name="bannerimage" id="bannerimage" placeholder="Imagen del Banner")

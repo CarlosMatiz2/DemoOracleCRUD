@@ -2,7 +2,11 @@ CREATE OR REPLACE PROCEDURE lista_publicaciones(cursorParam OUT SYS_REFCURSOR)
 IS
 BEGIN 
     OPEN cursorParam FOR
-        SELECT * FROM PUBLICATIONS; 
+        SELECT 
+            pub.*, us.USERNAME, cat.NOMBRE           
+        FROM PUBLICATIONS pub 
+        INNER JOIN USERS us ON us.ID = pub.IDUSER
+        INNER JOIN CATEGORIES cat ON cat.ID = pub.IDCATEGORY; 
 END;
 
 CREATE OR REPLACE PROCEDURE eliminar_publicacion(idPublicacion IN NUMBER)
@@ -32,3 +36,16 @@ BEGIN
         SELECT * FROM PUBLICATIONS WHERE ID = idPublication; 
 END;
 
+CREATE OR REPLACE PROCEDURE lista_usuarios(cursorParam OUT SYS_REFCURSOR)
+IS
+BEGIN 
+    OPEN cursorParam FOR
+        SELECT * FROM USERS; 
+END;
+
+CREATE OR REPLACE PROCEDURE lista_categorias(cursorParam OUT SYS_REFCURSOR)
+IS
+BEGIN 
+    OPEN cursorParam FOR
+        SELECT * FROM CATEGORIES; 
+END;

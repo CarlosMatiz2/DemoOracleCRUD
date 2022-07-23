@@ -41,10 +41,20 @@ html
                                     input(type="text" class="form-control" name="description" id="description" value=description)
                                 div(class="form-group")
                                     label(for="iduser") Usuario
-                                    input(type="text" class="form-control" name="iduser" id="iduser" value=iduser)
+                                    select(class="form-select" name="iduser" id="iduser")
+                                      each val in listUser
+                                        if val[0] == iduser
+                                          option(selected value=val[0])= val[2]
+                                        else 
+                                          option(value=val[0])= val[2]
                                 div(class="form-group")
                                     label(for="idcategory") Categoría
-                                    input(type="text" class="form-control" name="idcategory" id="idcategory" value=idcategory)
+                                    select(class="form-select" name="idcategory" id="idcategory")
+                                      each val in listCategories
+                                        if val[0] == idcategory
+                                          option(selected value=val[0])= val[1]
+                                        else 
+                                          option(value=val[0])= val[1]
                                 div(class="form-group")
                                     label(for="idcategory") Imagen del Banner
                                     input(type="text" class="form-control" name="bannerimage" id="bannerimage" value=bannerimage)

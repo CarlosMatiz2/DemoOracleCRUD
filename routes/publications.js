@@ -10,7 +10,15 @@ publication.get('/getAllPublications', function (req, res) {
 });
 
 publication.get('/createPublication', function (req, res) {
-    res.render('createPublication');
+    (async () => {
+        var user = await p_selectAllUsers(req, res);
+        var categories = await p_selectAllCategories(req, res);
+        res.render('createPublication', {
+                listUser: user,
+                listCategories: categories
+             }
+         );
+     })()
 });
 
 publication.get('/publications', function (req, res) {
@@ -19,10 +27,14 @@ publication.get('/publications', function (req, res) {
 
 publication.get('/editPublication/:id', function (req, res) {
     (async () => {
-       var user = await p_selectPublicationByIdEdit(req, res, parseInt(req.params.id));
+       var user = await p_selectPublicationByIdEdit(req, res, parseInt(req.params.id));        
+       var userList = await p_selectAllUsers(req, res);
+       var categories = await p_selectAllCategories(req, res);
        res.render('editPublication', {
             name: user[0][0], description: user[0][3], iduser: user[0][4],
-            idcategory: user[0][1], bannerimage: user[0][5], id: user[0][7]
+            idcategory: user[0][1], bannerimage: user[0][5], id: user[0][7], 
+            listUser: userList,
+            listCategories: categories
             }
         );
     })()
@@ -83,7 +95,11 @@ async function p_selectAllPublications(req, res) {
             IS
             BEGIN 
                 OPEN cursorParam FOR
-                    SELECT * FROM PUBLICATIONS; 
+                    SELECT 
+                        pub.*, us.USERNAME, cat.NOMBRE           
+                    FROM PUBLICATIONS pub 
+                    INNER JOIN USERS us ON us.ID = pub.IDUSER
+                    INNER JOIN CATEGORIES cat ON cat.ID = pub.IDCATEGORY; 
             END;
         `);
 
@@ -292,6 +308,106 @@ async function p_selectPublicationByIdEdit(req, res, id) {
 
         return rows1;
    
+    } catch (err) {
+        //send error message
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                // Always close connections
+                await connection.close();
+            } catch (err) {
+                console.error(err.message);
+            }
+        }
+    }
+}
+
+async function p_selectAllUsers(req, res) {
+    try {
+        connection = await oracledb.getConnection({
+            user: process.env.USER,
+            password: process.env.PASSWORD,
+            connectString: process.env.CONNECTSTRING
+        });
+
+        await connection.execute(`    
+            CREATE OR REPLACE PROCEDURE lista_usuarios(cursorParam OUT SYS_REFCURSOR)
+            IS
+            BEGIN 
+                OPEN cursorParam FOR
+                    SELECT * FROM USERS; 
+            END;
+        `);
+
+        result = await connection.execute(`      
+            BEGIN
+                lista_usuarios(:cursor); 
+            END;
+        `,{cursor: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT }});
+
+        const resultSet1 = result.outBinds.cursor;
+
+        // console.log("Cursor metadata:");
+        // console.log(resultSet1.metaData);
+    
+        const rows1 = await resultSet1.getRows();  // no parameter means get all rows
+        console.log(rows1);
+    
+        await resultSet1.close(); // always close the ResultSet
+
+        return rows1;
+
+    } catch (err) {
+        //send error message
+        return res.send(err.message);
+    } finally {
+        if (connection) {
+            try {
+                // Always close connections
+                await connection.close();
+            } catch (err) {
+                console.error(err.message);
+            }
+        }
+    }
+}
+
+async function p_selectAllCategories(req, res) {
+    try {
+        connection = await oracledb.getConnection({
+            user: process.env.USER,
+            password: process.env.PASSWORD,
+            connectString: process.env.CONNECTSTRING
+        });
+
+        await connection.execute(`    
+            CREATE OR REPLACE PROCEDURE lista_categorias(cursorParam OUT SYS_REFCURSOR)
+            IS
+            BEGIN 
+                OPEN cursorParam FOR
+                    SELECT * FROM CATEGORIES; 
+            END;
+        `);
+
+        result = await connection.execute(`      
+            BEGIN
+                lista_categorias(:cursor); 
+            END;
+        `,{cursor: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT }});
+
+        const resultSet1 = result.outBinds.cursor;
+
+        // console.log("Cursor metadata:");
+        // console.log(resultSet1.metaData);
+    
+        const rows1 = await resultSet1.getRows();  // no parameter means get all rows
+        console.log(rows1);
+    
+        await resultSet1.close(); // always close the ResultSet
+
+        return rows1;
+
     } catch (err) {
         //send error message
         return res.send(err.message);

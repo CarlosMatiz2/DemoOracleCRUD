@@ -6,6 +6,8 @@ function listPublications(publications){
         let tr = document.createElement('tr');
         let tdNombre = document.createElement('td');
         let tdDescription = document.createElement('td');
+        let tdUsername = document.createElement('td');
+        let tdCategory = document.createElement('td');
 
         let tdDelete = document.createElement('td');
         let aDelete = document.createElement('button');
@@ -13,10 +15,11 @@ function listPublications(publications){
         let tdEdit = document.createElement('td');
         let aEdit = document.createElement('a');
         
-
         tdNombre.textContent = publication[0];
         tdDescription.textContent = publication[3];
-        
+        tdUsername.textContent = publication[8];
+        tdCategory.textContent = publication[9];
+
         aDelete.setAttribute("onclick", "deletePublication("+publication[7]+")") ;
         aDelete.textContent = "Eliminar";
 
@@ -28,6 +31,8 @@ function listPublications(publications){
 
         tr.appendChild(tdNombre);
         tr.appendChild(tdDescription);
+        tr.appendChild(tdUsername);
+        tr.appendChild(tdCategory);
         tr.appendChild(tdDelete);
         tr.appendChild(tdEdit);
 
